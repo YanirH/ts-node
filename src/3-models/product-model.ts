@@ -3,10 +3,10 @@ export class ProductModel {
     public name: string;
     public price: number;
 
-    public constructor(id: number, name: string, price: number) {
-        this.id = id
-        this.name = name
-        this.price = price
+    public constructor(product: ProductModel) {
+        this.id = product.id
+        this.name = product.name
+        this.price = product.price
     }
 
 }

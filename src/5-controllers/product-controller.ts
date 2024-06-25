@@ -1,5 +1,7 @@
 import express, {Request, Response, NextFunction} from 'express'
-import { productService } from '../4-services/products'
+import { productService } from '../4-services/products-services'
+import { StatusCode } from '../3-models/enum';
+import { ProductModel } from '../3-models/product-model';
 
 
 class ProductController {
@@ -7,7 +9,10 @@ class ProductController {
 
     public constructor() {
         this.router.get('/api/products', this.getAllProducts);
-        this.router.get('/api/product/:id', this.getOneProduct)
+        this.router.get('/api/product/:id([0-9]+)', this.getOneProduct)
+        this.router.post('/api/product', this.addProduct)
+        this.router.delete('/api/product/:id([0-9]+)', this.delProduct)
+        this.router.put('/api/product/:id([0-9])+', this.updateProduct)
     }
 
     private async getAllProducts(req: Request, res: Response, next: NextFunction) {
@@ -32,6 +37,41 @@ class ProductController {
         }
     }
 
+    private async addProduct(req: Request, res: Response, next: NextFunction) {
+
+        try {
+        const product = new ProductModel(req.body)
+        const addedProduct = await productService.addProduct(product)
+        res.status(StatusCode.Created).json(addedProduct)
+        }
+        catch (err: any) {
+            next(err)
+        }
+    }
+
+    private async delProduct(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = +req.params.id 
+            await productService.delProduct(id)
+            res.sendStatus(StatusCode.NoContent)
+        }
+        catch (err: any) {
+            next(err)
+        }
+    }
+
+    private async updateProduct(req: Request, res: Response, next: NextFunction) {
+        try {
+            const id = +req.params.id 
+            req.body.id = id
+            const product = new ProductModel (req.body)
+            const updatedProduct = await productService.updateProduct(product)
+            res.json(updatedProduct)
+        }
+        catch (err: any) {
+            next(err)
+        }
+    }
 
     
 }

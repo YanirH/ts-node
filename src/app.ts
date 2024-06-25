@@ -15,7 +15,7 @@ server.use(securityMiddleware.preventXssAttack);
 
 // error middleware
 server.use(errorsMiddleware.catchAll);
-// server.use("*", errorsMiddleware.routeNotFound);
+server.use("*", errorsMiddleware.routeNotFound);
 
 
 

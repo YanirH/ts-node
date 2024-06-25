@@ -6,7 +6,7 @@ class SecurityMiddleware {
 
         for (const prop in req.body) {
             const value = req.body[prop]
-            if(typeof value === "string" && value.includes("<script")){
+            if(typeof value === "string" && value.includes("<script>")){
                 res.status(StatusCode.Forbidden).send('nice try')
                 return
             }

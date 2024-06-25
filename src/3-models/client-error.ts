@@ -11,4 +11,10 @@ export class ResourceNotFoundError extends ClientError {
         super(StatusCode.NotFound, `Item not found, id ${id} does not exsit`)
     }
 }
+export class RouteNotFoundError extends ClientError  {
+    public constructor(route: string, method: string) {
+        super(StatusCode.NotFound, `Route ${route} on method ${method} not exist`)
+    }
+}
+
 
