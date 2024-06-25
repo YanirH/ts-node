@@ -9,7 +9,7 @@ class ErrorsMiddleware {
         console.log(JSON.stringify(err))
 
         const statusCode = err.status || StatusCode.InternalServerError
-        const message = err.message
+        const message = err.message || 'Internal Server Error'
 
         res.status(statusCode).json({ message, statusCode })
     }

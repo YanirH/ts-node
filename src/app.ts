@@ -13,14 +13,13 @@ server.use(express.json())
 // server.use(logsMiddleware.logRequest);
 server.use(securityMiddleware.preventXssAttack);
 
+server.use('/', productController.router)
+server.use('/', employeesController.router)
+
 // error middleware
 server.use(errorsMiddleware.catchAll);
 server.use("*", errorsMiddleware.routeNotFound);
 
-
-
-server.use('/', productController.router)
-server.use('/', employeesController.router)
 
 server.listen(appConfig.port, ()=> {
     console.log('listening on http://localhost:' + appConfig.port)
