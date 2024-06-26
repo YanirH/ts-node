@@ -17,4 +17,12 @@ export class RouteNotFoundError extends ClientError  {
     }
 }
 
+export class ValidationError extends ClientError {
+    public constructor (message: string){
+        super(StatusCode.BadRequest, message)
+    }
+}
+
+
+
 

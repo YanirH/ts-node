@@ -8,11 +8,11 @@ class ProductController {
     public readonly router = express.Router()
 
     public constructor() {
-        this.router.get('/api/products', this.getAllProducts);
-        this.router.get('/api/product/:id([0-9]+)', this.getOneProduct)
-        this.router.post('/api/product', this.addProduct)
-        this.router.delete('/api/product/:id([0-9]+)', this.delProduct)
-        this.router.put('/api/product/:id([0-9])+', this.updateProduct)
+        this.router.get('/products', this.getAllProducts);
+        this.router.get('/product/:id([0-9]+)', this.getOneProduct)
+        this.router.post('/product', this.addProduct)
+        this.router.delete('/product/:id([0-9]+)', this.delProduct)
+        this.router.put('/product/:id([0-9])+', this.updateProduct)
     }
 
     private async getAllProducts(req: Request, res: Response, next: NextFunction) {

@@ -1,24 +1,22 @@
-import {Request, Response, NextFunction} from 'express'
-import { StatusCode } from '../3-models/enum'
-import { RouteNotFoundError } from '../3-models/client-error'
-
+import { Request, Response, NextFunction } from 'express';
+import { StatusCode } from '../3-models/enum';
+import { RouteNotFoundError } from '../3-models/client-error';
 
 class ErrorsMiddleware {
     public catchAll(err: any, req: Request, res: Response, next: NextFunction) {
+        console.log(JSON.stringify(err)); // Log the error for debugging
 
-        console.log(JSON.stringify(err))
+        const statusCode = err.status || StatusCode.InternalServerError;
+        const message = err.message || 'Internal Server Error';
 
-        const statusCode = err.status || StatusCode.InternalServerError
-        const message = err.message || 'Internal Server Error'
-
-        res.status(statusCode).json({ message, statusCode })
+        // Send a properly formatted JSON response
+        res.status(statusCode).json({ message, statusCode });
     }
 
     public routeNotFound(req: Request, res: Response, next: NextFunction) {
-        
-        const err = new RouteNotFoundError(req.originalUrl, req.method)
-        next(err)
+        const err = new RouteNotFoundError(req.originalUrl, req.method);
+        next(err);
     }
 }
 
-export const errorsMiddleware = new ErrorsMiddleware()
+export const errorsMiddleware = new ErrorsMiddleware();

@@ -18,6 +18,7 @@ class ProductService {
     }
 
     public async addProduct(product: ProductModel) {
+        product.validate()
         const sql = "INSERT INTO `products`(`name`,`price`) VALUES( ? , ? );"
         const info: OkPacketParams = await dal.execute(sql, [product.name, product.price])
         return info.insertId
@@ -25,6 +26,7 @@ class ProductService {
     }
 
     public async updateProduct(product: ProductModel) {
+        product.validate()
         const sql = "update products set name = ?, price = ? where id = ?"
         const info: OkPacketParams = await dal.execute(sql, [product.name, product.price, product.id])
         return product 
