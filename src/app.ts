@@ -7,6 +7,7 @@ import { errorsMiddleware } from './6-middleware/error-middleware';
 import { userController } from './5-controllers/user-conroller';
 import expressFileUpload from "express-fileupload"
 import { fileSaver } from 'uploaded-file-saver';
+import cors from "cors"
 import path from 'path';
 
 
@@ -14,7 +15,7 @@ fileSaver.config(path.join(__dirname, "1-assets", "images"))
 
 const server = express();
 
-server.use(express.json(), expressFileUpload())
+server.use(express.json(), expressFileUpload(), cors())
 
 // Register middleware: 
 // server.use(logsMiddleware.logRequest);
