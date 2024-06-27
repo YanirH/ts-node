@@ -3,6 +3,7 @@ import { productService } from '../4-services/products-services'
 import { StatusCode } from '../3-models/enum';
 import { ProductModel } from '../3-models/product-model';
 import { securityMiddleware } from '../6-middleware/security-middleware';
+import { fileSaver } from 'uploaded-file-saver';
 
 
 class ProductController {
@@ -11,6 +12,7 @@ class ProductController {
     public constructor() {
         this.router.get('/products', this.getAllProducts);
         this.router.get('/product/:id([0-9]+)', this.getOneProduct)
+        this.router.get('/products/images/:imageName)', this.getProductImage)
         this.router.post('/product',securityMiddleware.validateLogin, this.addProduct)
         this.router.delete('/product/:id([0-9]+)', securityMiddleware.validateAdmin, this.delProduct)
         this.router.put('/product/:id([0-9])+',securityMiddleware.validateLogin, this.updateProduct)
@@ -41,6 +43,7 @@ class ProductController {
     private async addProduct(req: Request, res: Response, next: NextFunction) {
 
         try {
+        req.body.image = req.files?.image
         const product = new ProductModel(req.body)
         const addedProduct = await productService.addProduct(product)
         product.id = addedProduct
@@ -72,6 +75,19 @@ class ProductController {
         }
         catch (err: any) {
             next(err)
+        }
+    }
+
+    private async getProductImage(req: Request, res: Response, next: NextFunction) {
+
+        try {
+            const imageName = req.params.imageName
+            const imagePath = fileSaver.getFilePath(imageName, true)
+            res.sendFile(imagePath)
+        }
+        catch (err: any) {
+            next(err)
+           
         }
     }
 

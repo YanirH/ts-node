@@ -6,6 +6,11 @@ import { securityMiddleware } from './6-middleware/security-middleware';
 import { errorsMiddleware } from './6-middleware/error-middleware';
 import { userController } from './5-controllers/user-conroller';
 import expressFileUpload from "express-fileupload"
+import { fileSaver } from 'uploaded-file-saver';
+import path from 'path';
+
+
+fileSaver.config(path.join(__dirname, "1-assets", "images"))
 
 const server = express();
 

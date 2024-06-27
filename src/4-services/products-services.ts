@@ -2,6 +2,7 @@ import { OkPacketParams } from "mysql2"
 import { dal } from "../2-utils/dal"
 import { ResourceNotFoundError } from "../3-models/client-error"
 import { ProductModel } from "../3-models/product-model"
+import { fileSaver } from "uploaded-file-saver"
 
 class ProductService {
     public async getAllProducts(){
@@ -19,8 +20,9 @@ class ProductService {
 
     public async addProduct(product: ProductModel) {
         product.validate()
-        const sql = "INSERT INTO `products`(`name`,`price`) VALUES( ? , ? );"
-        const info: OkPacketParams = await dal.execute(sql, [product.name, product.price])
+        const imageName = await fileSaver.add(product.image)
+        const sql = "INSERT INTO `products`(`name`,`price`, `imageName`) VALUES( ? , ? , ? );"
+        const info: OkPacketParams = await dal.execute(sql, [product.name, product.price, imageName])
         return info.insertId
         
     }
