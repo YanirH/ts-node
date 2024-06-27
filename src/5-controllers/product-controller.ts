@@ -2,6 +2,7 @@ import express, {Request, Response, NextFunction} from 'express'
 import { productService } from '../4-services/products-services'
 import { StatusCode } from '../3-models/enum';
 import { ProductModel } from '../3-models/product-model';
+import { securityMiddleware } from '../6-middleware/security-middleware';
 
 
 class ProductController {
@@ -10,9 +11,9 @@ class ProductController {
     public constructor() {
         this.router.get('/products', this.getAllProducts);
         this.router.get('/product/:id([0-9]+)', this.getOneProduct)
-        this.router.post('/product', this.addProduct)
-        this.router.delete('/product/:id([0-9]+)', this.delProduct)
-        this.router.put('/product/:id([0-9])+', this.updateProduct)
+        this.router.post('/product',securityMiddleware.validateLogin, this.addProduct)
+        this.router.delete('/product/:id([0-9]+)', securityMiddleware.validateAdmin, this.delProduct)
+        this.router.put('/product/:id([0-9])+',securityMiddleware.validateLogin, this.updateProduct)
     }
 
     private async getAllProducts(req: Request, res: Response, next: NextFunction) {
@@ -42,7 +43,8 @@ class ProductController {
         try {
         const product = new ProductModel(req.body)
         const addedProduct = await productService.addProduct(product)
-        res.status(StatusCode.Created).json(addedProduct)
+        product.id = addedProduct
+        res.status(StatusCode.Created).json(product)
         }
         catch (err: any) {
             next(err)

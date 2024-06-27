@@ -5,10 +5,11 @@ import { employeesController } from './5-controllers/employees';
 import { securityMiddleware } from './6-middleware/security-middleware';
 import { errorsMiddleware } from './6-middleware/error-middleware';
 import { userController } from './5-controllers/user-conroller';
+import expressFileUpload from "express-fileupload"
 
 const server = express();
 
-server.use(express.json())
+server.use(express.json(), expressFileUpload())
 
 // Register middleware: 
 // server.use(logsMiddleware.logRequest);
