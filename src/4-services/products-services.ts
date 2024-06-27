@@ -6,13 +6,13 @@ import { fileSaver } from "uploaded-file-saver"
 
 class ProductService {
     public async getAllProducts(){
-        const sql = "select * from products"
+        const sql = "select *, concat('http://localhost:4000/api/products/images/', imageName) as imageUrl from products"
         const products = await dal.execute(sql)
         return products
     }
 
     public async getOneProduct(id: number){
-        const sql = "select * from products where id = ?"
+        const sql = "select *, concat('http://localhost:4000/api/products/images/', imageName) as imageUrl from products where id = ?"
         const product = await dal.execute(sql, [id])
         if(product.length === 0) throw new ResourceNotFoundError(id)
         return product
@@ -23,7 +23,9 @@ class ProductService {
         const imageName = await fileSaver.add(product.image)
         const sql = "INSERT INTO `products`(`name`,`price`, `imageName`) VALUES( ? , ? , ? );"
         const info: OkPacketParams = await dal.execute(sql, [product.name, product.price, imageName])
-        return info.insertId
+        if(!info.insertId) return "no success"
+        product = await this.getOneProduct(info.insertId)
+        return product
         
     }
 
