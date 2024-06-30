@@ -20,9 +20,9 @@ class ProductService {
 
     public async addProduct(product: ProductModel) {
         product.validate()
-        const imageName = await fileSaver.add(product.image)
-        const sql = "INSERT INTO `products`(`name`,`price`, `imageName`) VALUES( ? , ? , ? );"
-        const info: OkPacketParams = await dal.execute(sql, [product.name, product.price, imageName])
+        const imageName = product.image ? await fileSaver.add(product.image) : null
+        const sql = "INSERT INTO `products`(`name`,`price`,`stock`, `imageName`) VALUES( ? , ? , ? );"
+        const info: OkPacketParams = await dal.execute(sql, [product.name, product.price,product.stock, imageName])
         if(!info.insertId) return "no success"
         product = await this.getOneProduct(info.insertId)
         return product

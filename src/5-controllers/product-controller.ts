@@ -12,7 +12,7 @@ class ProductController {
     public constructor() {
         this.router.get('/products', this.getAllProducts);
         this.router.get('/product/:id([0-9]+)', this.getOneProduct)
-        this.router.post('/product',securityMiddleware.validateLogin, this.addProduct)
+        this.router.post('/product', this.addProduct)
         this.router.delete('/product/:id([0-9]+)', securityMiddleware.validateAdmin, this.delProduct)
         this.router.put('/product/:id([0-9])+',securityMiddleware.validateLogin, this.updateProduct)
         this.router.get('/products/images/:imageName', this.getProductImage)
